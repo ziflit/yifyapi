@@ -1,0 +1,161 @@
+* Estructura general:
+** Por cada request siempre existe:
+#+begin_src json
+  "status": "ok"
+  "status_message": "Query was successful",
+  "data": {
+      "movie_count": 5233,
+      "limit": 50,
+      "page_number": 1,
+      "movies": [{
+          "id": "128987",
+          "url": "http:\/\/yify.is\/movie\/yifi_view\/how-to-be-single-2016\/128987",
+          "imdb_code": "tt1292566",
+          "title": "How to Be Single",
+          "title_long": "How to Be Single (2016)",
+          "slug": "how-to-be-single-2016",
+          "year": 2016,
+          "rating": 6.2,
+          "runtime": 0,
+          "genres": [" Comedy", " Romance \n\t\t\t\t"],
+          "cast": [" Dakota Johnson", " Rebel Wilson", " Leslie Mann\n\t\t\t\t"],
+          "directors": [""],
+          "language": "English",
+          "mpa_rating": "R",
+          "synopsis": "\n          There's a right way to be single, a wrong way to be single, and then...there's Alice. And Robin. Lucy. Meg. Tom. David. New York City is full of lonely hearts seeking the right match, be it a love connection, a hook-up, or something in the middle. And somewhere between the teasing texts and one-night stands, what these unmarrieds all have in common is the need to learn how to be single in a world filled with ever-evolving definitions of love. Sleeping around in the city that never sleeps was never so much fun.        ",
+          "yt_trailer_code": "QiUA-WZzvlI",
+          "google_video": "",
+          "background_image": "http:\/\/yify.is\/data\/background\/128987.jpg",
+          "small_cover_image": "http:\/\/video2k.is\/data\/my_videos\/cover\/cover-28154756-vidipu-movie.jpg",
+          "medium_cover_image": "http:\/\/yify.is\/data\/medium_cover\/128987.jpg",
+          "state": "ok",
+          "torrents": [{
+              "url": "magnet:?xt=urn:btih:258C42264CC71F2C6C234BA0C4F0C9B7E8494B13&amp;dn=How+to+Be+Single+%282016%29+%5B720p%5D+%5BYTS.AG%5D&amp;tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&amp;tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&amp;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&amp;dt=",
+              "hash": "258C42264CC71F2C6C234BA0C4F0C9B7E8494B13",
+              "quality": "720p",
+              "seeds": 0,
+              "peers": 0,
+              "size": "800.61 MB",
+              "size_bytes": "839500431",
+              "date_uploaded": "2015-05-28 17:49:07",
+              "date_uploaded_unix": "1432792147"
+          }, {
+              "url": "magnet:?xt=urn:btih:F3F24AF83EA072B7E57B8F5B5C1E2466DC6D9CA1&amp;dn=How+to+Be+Single+%282016%29+%5B1080p%5D+%5BYTS.AG%5D&amp;tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&amp;tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&amp;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&amp;dt=",
+              "hash": "F3F24AF83EA072B7E57B8F5B5C1E2466DC6D9CA1",
+              "quality": "1080p",
+              "seeds": 0,
+              "peers": 0,
+              "size": "1.66 GB",
+              "size_bytes": "1782411427",
+              "date_uploaded": "2015-05-28 17:49:07",
+              "date_uploaded_unix": "1432792147"
+          }],
+          "date_uploaded": "2016-05-12 17:02:00",
+          "date_uploaded_unix": 1463072520
+      }]
+  }
+#+end_src
+** Status y status_message se refieren al 200 ok o lo que correpsonda.
+Básicamente checkear el ok.
+#+begin_src python
+  import requests
+  response = requests.get("http://www.yify.is/api/v2/list_movies.json?title=Predestination")
+  print( response.status )
+#+end_src
+
+#+RESULTS:
+
+** Data:
+*** Tengo paging indicado por ~max_count~, ~limit~ y ~page_number~
+*** Y tengo la crème de la crème: ~movies~:
+    Por cada movie probablemente me importan ~title~ y ~title_long~ como strings.
+    metadata de movie:
+    #+begin_src json
+    "imdb_code": "tt1292566",
+    "title": "How to Be Single",
+    "title_long": "How to Be Single (2016)",
+    "slug": "how-to-be-single-2016",
+    "year": 2016,
+    "rating": 6.2,
+    "runtime": 0,
+    "genres": [" Comedy", " Romance \n\t\t\t\t"],
+    "cast": [" Dakota Johnson", " Rebel Wilson", " Leslie Mann\n\t\t\t\t"],
+    "directors": [""],
+    "language": "English",
+    "mpa_rating": "R",
+    "synopsis": "\n          There's a right way to be single, a wrong way to be single, and then...there's Alice. And Robin... [lo corté] "
+    "yt_trailer_code": "QiUA-WZzvlI",
+    "google_video": "",
+    "background_image": "http:\/\/yify.is\/data\/background\/128987.jpg",
+    "small_cover_image": "http:\/\/video2k.is\/data\/my_videos\/cover\/cover-28154756-vidipu-movie.jpg",
+    "medium_cover_image": "http:\/\/yify.is\/data\/medium_cover\/128987.jpg",
+    #+end_src
+    Los esenciales son ~title~ ~year~ ~rating~, ~cast|directors~ y ~synopsis~ (opcional?) junto con ~medium_cover_image~
+    Además de la metadata tenmos los links de descargas:
+    #+begin_src json
+    "torrents": [{
+        "url": "magnet:?xt=urn:btih:258C42264CC71F2C6C234BA0C4F0C9B7E8494B13&amp;dn=How+to+Be+Single+%282016%29+%5B720p%5D+%5BYTS.AG%5D&amp;tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&amp;tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&amp;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&amp;dt=",
+        "hash": "258C42264CC71F2C6C234BA0C4F0C9B7E8494B13",
+        "quality": "720p",
+        "seeds": 0,
+        "peers": 0,
+        "size": "800.61 MB",
+        "size_bytes": "839500431",
+        "date_uploaded": "2015-05-28 17:49:07",
+        "date_uploaded_unix": "1432792147"
+    }, {
+        "url": "magnet:?xt=urn:btih:F3F24AF83EA072B7E57B8F5B5C1E2466DC6D9CA1&amp;dn=How+to+Be+Single+%282016%29+%5B1080p%5D+%5BYTS.AG%5D&amp;tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&amp;tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&amp;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&amp;dt=",
+        "hash": "F3F24AF83EA072B7E57B8F5B5C1E2466DC6D9CA1",
+        "quality": "1080p",
+        "seeds": 0,
+        "peers": 0,
+        "size": "1.66 GB",
+        "size_bytes": "1782411427",
+        "date_uploaded": "2015-05-28 17:49:07",
+        "date_uploaded_unix": "1432792147"
+    }],
+    "date_uploaded": "2016-05-12 17:02:00",
+    #+end_src
+    de los que me importa ~size~, ~quality~, ~seeds~ y ~peers~ para reportar y ~url~ para trabajar.
+** Cerrando:
+#+BEGIN_SRC python :results output
+  import requests
+  import sys
+  next_page = 1
+  response = requests.get("http://www.yify.is/api/v2/list_movies.json?query_term=Predestination&page=%s" % next_page)
+  print(response.status_code)
+  import json
+  if response.content:
+      dict_response = json.loads(response.content)
+      print('Status', dict_response['status'])
+      print('Status message', dict_response['status_message'])
+      total_results = dict_response['data']['movie_count']
+      curr_results = dict_response['data']['movies']
+      page = dict_response['data']['page_number']
+      limit = dict_response['data']['limit']
+      for m in dict_response['data']['movies']:
+          if m['title'].find('Predestination') != -1:
+              print("Encontre algo")
+              print(m)
+      while (next_page * limit) < total_results and next_page <= 20:
+          for m in dict_response['data']['movies']:
+              if m['title'].find('Predestination') != -1:
+                  print("Encontre algo")
+                  print(m)
+                  sys.exit(0)
+          next_page = next_page + 1
+          response = requests.get("http://www.yify.is/api/v2/list_movies.json?query_term=Predestination&page=%s" % next_page)
+          dict_response = json.loads(response.content)
+          curr_results = dict_response['data']['movies']
+          page = dict_response['data']['page_number']
+      else:
+          print('Pagina %s, me pudri' % next_page)
+#+END_SRC
+
+#+RESULTS:
+: 200
+: ('Status', u'ok')
+: ('Status message', u'Query was successful')
+: Encontre algo
+: {u'rating': 7.4, u'date_uploaded_unix': 1416866040, u'google_video': u'http://www.yify.is/api/proxylink/2024438', u'torrents': [{u'peers': 157, u'hash': u'A2A76633D94DE3FBE65BE506C45F4A8D9673473C', u'url': u'magnet:?xt=urn:btih:A2A76633D94DE3FBE65BE506C45F4A8D9673473C&amp;dn=Predestination+%282014%29+%5B720p%5D&amp;tr=http%3A%2F%2Ftracker.yify-torrents.com%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&amp;tr=udp%3A%2F%2Ftracker.publicbt.org%3A80&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&amp;tr=udp%3A%2F%2Fopen.demonii.com%3A1337&amp;tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&amp;tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337&amp;dt=', u'date_uploaded_unix': u'1432792147', u'seeds': 1234, u'size_bytes': u'794002718', u'quality': u'720p', u'date_uploaded': u'2015-05-28 17:49:07', u'size': u'757.22 MB'}, {u'peers': 97, u'hash': u'02A5AD1A8AF7A8B7BFF49C8FAE39D84A0A25C96A', u'url': u'magnet:?xt=urn:btih:02A5AD1A8AF7A8B7BFF49C8FAE39D84A0A25C96A&amp;dn=Predestination+%282014%29+%5B1080p%5D&amp;tr=http%3A%2F%2Ftracker.yify-torrents.com%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&amp;tr=udp%3A%2F%2Ftracker.publicbt.org%3A80&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&amp;tr=udp%3A%2F%2Fopen.demonii.com%3A1337&amp;tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337&amp;tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337&amp;dt=', u'date_uploaded_unix': u'1432792147', u'seeds': 669, u'size_bytes': u'1546188226', u'quality': u'1080p', u'date_uploaded': u'2015-05-28 17:49:07', u'size': u'1.44 GB'}], u'year': 2014, u'id': u'60616', u'genres': [u'Drama', u' Mystery', u' Sci-Fi', u' Thriller'], u'title': u'Predestination', u'title_long': u'Predestination (2014)', u'state': u'ok', u'small_cover_image': u'http://video2k.is/data/my_videos/cover/cover-36032429-vidipu-movie.jpg', u'mpa_rating': u'R', u'background_image': u'http://www.yify.is/data/background/60616.jpg', u'imdb_code': u'tt2397535', u'medium_cover_image': u'http://www.yify.is/data/medium_cover/60616.jpg', u'slug': u'predestination-2014', u'directors': [u'Michael Spierig', u' Peter Spierig'], u'language': u'English', u'url': u'http://www.yify.is/movie/yifi_view/predestination-2014/60616', u'cast': [u'Ethan Hawke', u' Sarah Snook', u' Christopher Kirby', u' Christopher Som'], u'synopsis': u"The film begins with a temporal agent attempting to apprehend an infamous terrorist known as the 'Fizzle Bomber'...", u'date_uploaded': u'2014-11-24 21:54:00', u'runtime': 97, u'yt_trailer_code': u'-FcK_UiVV40'}
+: Pagina 1, me pudri
